@@ -7,29 +7,21 @@ app,rt = fast_app()
 headers = (Script(src="https://cdn.tailwindcss.com"),
            Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css"))
 
-messages = [
-    {"role":"user", "content":"Hello"},
-    {"role":"assistant", "content":"Hi, how can I assist you?"}
-]
-
-def ChatMessage(msg):
-    return Div(
-        Div(msg['role'], cls="chat-header"),
-        Div(msg['content'], cls=f"chat-bubble chat-bubble-{'primary' if msg['role'] == 'user' else 'secondary'}"),
-        cls=f"chat chat-{'end' if msg['role'] == 'user' else 'start'}")
-
-chatbox = Div(
-    Div(*[ChatMessage(msg) for msg in messages], cls="chat-box", id="chatlist"),
-    cls="max-w-screen-md mx-auto"
-)
-
-chatinput = Div(
-    P("Input user here"),cls="max-w-screen-md mx-auto pt-4"
-)
-
 mainsc = Div(
-    chatbox(),
-    chatinput(),
+    Div(
+        H1("Certificate Generator", cls="text-2xl font-bold mb-4 text-gray-300"),
+        Div(
+            Input(type="text", id="name", placeholder="Enter Name", cls="input input-bordered w-full max-w-xs"),
+            cls="mb-4"
+        ),
+        Button(
+            "Download Certificate",
+            onclick=f"window.location.href='/generate/' + document.getElementById('name').value",
+            cls="btn btn-primary w-full"
+        ),
+        cls="bg-gray-700 p-8 rounded-lg shadow-md w-96"
+    ),
+    cls="flex flex-col items-center justify-center min-h-screen bg-gray-900"
 )
 
 
