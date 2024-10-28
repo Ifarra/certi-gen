@@ -44,6 +44,7 @@ TEMPLATE_PATH = "web/certificate_template.png"
 def create_certificate(name):
     with Image.open(TEMPLATE_PATH) as certificate:
         draw = ImageDraw.Draw(certificate)
+        name = urllib.parse.unquote(name)
 
         font_path = "web/arial.ttf"
         font_size = 70
@@ -55,8 +56,6 @@ def create_certificate(name):
 
         text_x = (certificate.width - text_width) // 2
         text_y = (certificate.height - text_height + 310) // 2
-
-        name = urllib.parse.unquote(name)
 
         draw.text((text_x, text_y), name, fill="black", font=font)
 
