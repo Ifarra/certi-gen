@@ -47,7 +47,7 @@ def create_certificate(name):
         name = urllib.parse.unquote(name)
 
         font_path = "web/arial.ttf"
-        font_size = 70 if len(name) <= 25 else 40
+        font_size = 70 if len(name) <= 25 else 45
         font = ImageFont.truetype(font_path, font_size)
 
         text_bbox = draw.textbbox((0, 0), name, font=font)
