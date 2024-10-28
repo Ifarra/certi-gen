@@ -1,6 +1,7 @@
 from fasthtml.common import *
 from PIL import Image, ImageDraw, ImageFont
 import os
+import tempfile
 
 app,rt = fast_app()
 
@@ -32,37 +33,36 @@ def get(): return Html(*headers, mainsc)
 TEMPLATE_PATH = "web/certificate_template.png"
 
 def create_certificate(name):
-    certificate = Image.open(TEMPLATE_PATH)
-    draw = ImageDraw.Draw(certificate)
+    with Image.open(TEMPLATE_PATH) as certificate:
+        draw = ImageDraw.Draw(certificate)
 
-    font_path = "web/arial.ttf" 
-    font_size = 70
-    font = ImageFont.truetype(font_path, font_size)
+        font_path = "web/arial.ttf"
+        font_size = 70
+        font = ImageFont.truetype(font_path, font_size)
 
-    text_bbox = draw.textbbox((0, 0), name, font=font)
-    text_width = text_bbox[2] - text_bbox[0]
-    text_height = text_bbox[3] - text_bbox[1]
-    
-    text_x = (certificate.width - text_width) // 2
-    text_y = (certificate.height - text_height + 310) // 2
+        text_bbox = draw.textbbox((0, 0), name, font=font)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
 
-    draw.text((text_x, text_y), name, fill="black", font=font)
+        text_x = (certificate.width - text_width) // 2
+        text_y = (certificate.height - text_height + 310) // 2
 
-    os.makedirs("certificate", exist_ok=True)
-    output_path = f"certificate/{name}_certificate.png"
-    certificate.save(output_path)
-    return output_path
+        draw.text((text_x, text_y), name, fill="black", font=font)
 
+        # Use a temporary file
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as tmp_file:
+            certificate.save(tmp_file.name)
+            return tmp_file.name
 
 @app.route("/generate/{name}", methods=['GET'])
 def generate_certificate(name: str):
     if not name:
         return "Name parameter is required", 400
-    
-    certificate_path = create_certificate(name)
-    return FileResponse(f'{certificate_path}', filename=f'{name}_certificate.png', headers={"Content-Disposition": f"attachment; filename={name}_certificate.png"})
-    # return FileResponse(f'{certificate_path}')
 
-
+    try:
+        certificate_path = create_certificate(name)
+        return FileResponse(certificate_path, filename=f'{name}_certificate.png', headers={"Content-Disposition": f"attachment; filename={name}_certificate.png"})
+    except Exception as e:
+        return f"An error occurred: {str(e)}", 500
 
 serve()
