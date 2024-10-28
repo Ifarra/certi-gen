@@ -2,6 +2,7 @@ from fasthtml.common import *
 from PIL import Image, ImageDraw, ImageFont
 import os
 import tempfile
+import urllib
 
 app,rt = fast_app()
 
@@ -54,6 +55,8 @@ def create_certificate(name):
 
         text_x = (certificate.width - text_width) // 2
         text_y = (certificate.height - text_height + 310) // 2
+
+        name = urllib.parse.unquote(name)
 
         draw.text((text_x, text_y), name, fill="black", font=font)
 
