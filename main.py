@@ -12,13 +12,21 @@ mainsc = Div(
     Div(
         H1("Certificate Generator", cls="text-2xl font-bold mb-4 text-gray-300"),
         Div(
-            Input(type="text", id="name", placeholder="Enter Name", cls="input input-bordered w-full max-w-xs"),
+            Input(type="text", id="name", placeholder="Enter Name", cls="input input-bordered w-full"),
             cls="mb-4"
         ),
-        Button(
-            "Download Certificate",
-            onclick=f"window.location.href='/generate/' + document.getElementById('name').value",
-            cls="btn btn-primary w-full"
+        Div(
+            Button(
+                "Download Certificate",
+                onclick=f"window.location.href='/generate/' + document.getElementById('name').value",
+                cls="btn btn-primary flex-1"
+            ),
+            Button(
+                "Preview Certificate",
+                onclick=f"window.location.href='/preview/' + document.getElementById('name').value",
+                cls="btn btn-primary flex-1"
+            ),
+            cls="flex w-full gap-2"
         ),
         cls="bg-gray-700 p-8 rounded-lg shadow-md w-96"
     ),
@@ -64,5 +72,16 @@ def generate_certificate(name: str):
         return FileResponse(certificate_path, filename=f'{name}_certificate.png', headers={"Content-Disposition": f"attachment; filename={name}_certificate.png"})
     except Exception as e:
         return f"An error occurred: {str(e)}", 500
+
+@app.route("/preview/{name}", methods=['GET'])
+def preview_certificate(name: str):
+    if not name:
+        return "Name parameter is required", 400
+    try:
+        certificate_path = create_certificate(name)
+        return FileResponse(certificate_path)
+    except Exception as e:
+        return f"An error occurred: {str(e)}", 500
+
 
 serve()
