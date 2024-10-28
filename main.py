@@ -29,13 +29,13 @@ mainsc = Div(
 def get(): return Html(*headers, mainsc)
 
 # Path to the certificate template
-TEMPLATE_PATH = "certificate_template.png"
+TEMPLATE_PATH = "web/certificate_template.png"
 
 def create_certificate(name):
     certificate = Image.open(TEMPLATE_PATH)
     draw = ImageDraw.Draw(certificate)
 
-    font_path = "arial.ttf" 
+    font_path = "web/arial.ttf" 
     font_size = 70
     font = ImageFont.truetype(font_path, font_size)
 
@@ -48,9 +48,11 @@ def create_certificate(name):
 
     draw.text((text_x, text_y), name, fill="black", font=font)
 
+    os.makedirs("certificate", exist_ok=True)
     output_path = f"certificate/{name}_certificate.png"
     certificate.save(output_path)
     return output_path
+
 
 @app.route("/generate/{name}", methods=['GET'])
 def generate_certificate(name: str):
