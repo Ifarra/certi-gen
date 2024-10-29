@@ -7,11 +7,13 @@ import qrcode
 import base64
 from datetime import datetime
 
-app,rt = fast_app()
+app,rt = fast_app(static_folder="web")
+
 
 headers = (Script(src="https://cdn.tailwindcss.com"),
            Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css"),
-           Link(rel="icon", href="favicon.ico", type="image/x-icon"))
+           Link(rel="icon", href="web/favicon.ico", type="image/x-icon"),
+           Title("Certificate Generator"))
 
 mainsc = Div(
     Div(
