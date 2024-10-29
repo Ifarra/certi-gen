@@ -6,4 +6,3 @@ autopep8
 Pillow # PIL image-loading library
 python-fasthtml
 qrcode
-base64
