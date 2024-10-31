@@ -15,7 +15,24 @@ headers = (Script(src="https://cdn.tailwindcss.com"),
            Link(rel="icon", href="web/favicon.ico", type="image/x-icon"),
            Title("Certificate Generator"))
 
+previewer = Div(
+    Div(
+        Img(src="", cls="w-full h-96 object-contain", id="preview"),
+        Div(
+            "x",
+            cls="absolute top-2 right-4 cursor-pointer text-2xl font-bold",
+            onclick="document.getElementById('preview_warper').classList.add('hidden')",
+        ),
+        cls="border border-4 border-blue-900 rounded-lg flex-1 relative"
+    ),
+    cls="flex flex-col items-center justify-center hidden",
+    id="preview_warper"
+)
+
+
+
 mainsc = Div(
+    previewer,
     Div(
         H1("Certificate Generator", cls="text-2xl font-bold mb-4 text-gray-300"),
         Div(
@@ -30,15 +47,14 @@ mainsc = Div(
             ),
             Button(
                 "Preview Certificate",
-                onclick=f"window.location.href='/preview/' + document.getElementById('name').value + '/' + window.location.hostname",
+                onclick="let name = document.getElementById('name').value; let preview = document.getElementById('preview'); let preview_warper = document.getElementById('preview_warper'); preview.src = '/preview/' + name + '/' + window.location.hostname; preview_warper.classList.remove('hidden')",
                 cls="btn btn-primary flex-1"
             ),
-
             cls="flex w-full gap-2"
         ),
         cls="bg-gray-700 p-8 rounded-lg shadow-md w-96"
     ),
-    cls="flex flex-col items-center justify-center min-h-screen bg-gray-900"
+    cls="flex flex-col items-center justify-center min-h-screen bg-gray-900 gap-5"
 )
 
 
