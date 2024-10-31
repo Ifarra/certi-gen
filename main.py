@@ -15,6 +15,8 @@ headers = (Script(src="https://cdn.tailwindcss.com"),
            Link(rel="icon", href="web/favicon.ico", type="image/x-icon"),
            Title("Certificate Generator"),
            Meta(name="viewport", content="width=device-width, initial-scale=1"),
+           Script(src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"),
+           Link(rel="stylesheet", href="web/flash.css"),
            )
 
 previewer = Div(
@@ -47,7 +49,7 @@ mainsc = Div(
             ),
             Button(
                 "Preview Certificate",
-                onclick="let name = document.getElementById('name').value; let preview = document.getElementById('preview'); let preview_warper = document.getElementById('preview_warper'); preview.src = '/preview/' + name + '/' + window.location.hostname; preview_warper.classList.remove('hidden')",
+                onclick="let name = document.getElementById('name').value; let preview = document.getElementById('preview'); let preview_warper = document.getElementById('preview_warper'); preview.src = '/preview/' + name + '/' + window.location.hostname; preview_warper.classList.remove('hidden');",
                 cls="btn btn-primary w-full md:flex-1 mt-2 md:mt-0"
             ),
             cls="flex flex-col md:flex-row w-full gap-2"
