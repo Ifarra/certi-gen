@@ -13,28 +13,28 @@ app,rt = fast_app(static_folder="web")
 headers = (Script(src="https://cdn.tailwindcss.com"),
            Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css"),
            Link(rel="icon", href="web/favicon.ico", type="image/x-icon"),
-           Title("Certificate Generator"))
+           Title("Certificate Generator"),
+           Meta(name="viewport", content="width=device-width, initial-scale=1"),
+           )
 
 previewer = Div(
     Div(
-        Img(src="", cls="w-full h-96 object-contain", id="preview"),
+        Img(src="", cls="w-full h-auto object-contain md:h-[400px]", id="preview"),
         Div(
             "x",
-            cls="absolute top-2 right-4 cursor-pointer text-2xl font-bold",
+            cls="absolute top-2 right-4 cursor-pointer text-2xl font-bold text-gray-300 hover:text-gray-500",
             onclick="document.getElementById('preview_warper').classList.add('hidden')",
         ),
         cls="border border-4 border-blue-900 rounded-lg flex-1 relative"
     ),
-    cls="flex flex-col items-center justify-center hidden",
+    cls="flex flex-col items-center justify-center hidden md:max-w-xl",
     id="preview_warper"
 )
-
-
 
 mainsc = Div(
     previewer,
     Div(
-        H1("Certificate Generator", cls="text-2xl font-bold mb-4 text-gray-300"),
+        H1("Certificate Generator", cls="text-2xl font-bold mb-4 text-gray-300 text-center md:text-left"),
         Div(
             Input(type="text", id="name", placeholder="Enter Name", cls="input input-bordered w-full"),
             cls="mb-4"
@@ -43,19 +43,20 @@ mainsc = Div(
             Button(
                 "Download Certificate",
                 onclick=f"window.location.href='/generate/' + document.getElementById('name').value + '/' + window.location.hostname",
-                cls="btn btn-primary flex-1"
+                cls="btn btn-primary w-full md:flex-1"
             ),
             Button(
                 "Preview Certificate",
                 onclick="let name = document.getElementById('name').value; let preview = document.getElementById('preview'); let preview_warper = document.getElementById('preview_warper'); preview.src = '/preview/' + name + '/' + window.location.hostname; preview_warper.classList.remove('hidden')",
-                cls="btn btn-primary flex-1"
+                cls="btn btn-primary w-full md:flex-1 mt-2 md:mt-0"
             ),
-            cls="flex w-full gap-2"
+            cls="flex flex-col md:flex-row w-full gap-2"
         ),
-        cls="bg-gray-700 p-8 rounded-lg shadow-md w-96"
+        cls="bg-gray-700 p-8 rounded-lg shadow-md md:w-96"
     ),
-    cls="flex flex-col items-center justify-center min-h-screen bg-gray-900 gap-5"
+    cls="flex flex-col items-center justify-center min-h-screen bg-gray-900 gap-5 p-4 md:p-0"
 )
+
 
 
 @rt('/')
